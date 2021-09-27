@@ -1,0 +1,27 @@
+{
+	"env": {
+		"browser": true,
+		"es2021": true,
+		"node": true
+	},
+	"parserOptions": {
+		"ecmaVersion": 12,
+		"sourceType": "module"
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:prettier/recommended"
+	],
+	"rules": {
+		"prettier/prettier": [
+			"warn"
+		],
+		"indent": [
+			"warn",
+			4,
+			{
+				"SwitchCase": 1
+			}
+		]
+	}
+}
