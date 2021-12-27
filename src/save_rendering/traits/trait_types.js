@@ -1,0 +1,90 @@
+const WEAPON_TYPES = {
+    SWORD: 'SWORD',
+    SPEAR: 'SPEAR',
+    SHIELD: 'SHIELD',
+    BOW: 'BOW',
+    FIST: 'FIST',
+    GUN: 'GUN'
+};
+
+const SLOT_TYPES = {
+    ATTACK: 'ATTACK',
+    SPECIAL: 'SPECIAL',
+    CAST: 'CAST',
+    CAST_LOADED: 'CAST_LOADED',
+    DASH: 'DASH',
+    CALL: 'CALL'
+};
+
+const TIER_TYPES = {
+    SLOT: 'SLOT',
+    TIER_1: 'TIER_1',
+    TIER_2: 'TIER_2',
+    LEGENDARY: 'LEGENDARY',
+    DUO: 'DUO'
+};
+
+const CHAOS_TYPES = {
+    BLESSING: 'BLESSING',
+    CURSE: 'CURSE'
+};
+
+const STORY_ROOM_TYPES = {
+    BOULDY: 'BOULDY',
+    EURYDICE: 'EURYDICE',
+    PATROCLUS: 'PATROCLUS'
+};
+
+const GOD_TYPES = {
+    ATHENA: 'ATHENA',
+    APHRODITE: 'APHRODITE',
+    ARTEMIS: 'ARTEMIS',
+    DEMETER: 'DEMETER',
+    ARES: 'ARES',
+    ZEUS: 'ZEUS',
+    POSEIDON: 'POSEIDON',
+    DIONYSUS: 'DIONYSUS',
+    HERMES: 'HERMES',
+    HADES: 'HADES'
+};
+
+const TRAIT_TYPES = {
+    ASPECT: 'ASPECT',
+    HAMMER: 'HAMMER',
+    KEEPSAKE: 'KEEPSAKE',
+    COMPANION: 'COMPANION',
+    STORY_ROOM: 'STORY_ROOM',
+    SHOP_ITEM: 'SHOP_ITEM',
+    GOD: 'GOD',
+    CHAOS: 'CHAOS',
+    MISC: 'MISC',
+    COMPATIBILITY: 'COMPATIBILITY'
+};
+
+const RUN_STRUCTURED_TRAIT_TYPES = {
+    WEAPON: 'WEAPON',
+    FINAL_KEEPSAKE: 'FINAL_KEEPSAKE',
+    SLOT: TIER_TYPES.SLOT,
+    DUO: TIER_TYPES.DUO,
+    ...TRAIT_TYPES
+};
+
+const INTERPOLATION_TYPES = {
+    TRAIT_PROPERTY: 'TRAIT_PROPERTY'
+};
+
+const ALL_TRAIT_TYPES = {
+    WEAPON_TYPES,
+    TIER_TYPES,
+    SLOT_TYPES,
+    CHAOS_TYPES,
+    STORY_ROOM_TYPES,
+    GOD_TYPES,
+    TRAIT_TYPES,
+    RUN_STRUCTURED_TRAIT_TYPES,
+    INTERPOLATION_TYPES
+};
+
+// TODO: Character data, about gods and about everyone because of keepsakes and companions.
+
+export { ALL_TRAIT_TYPES };

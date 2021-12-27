@@ -1,11 +1,11 @@
 {
 	"name": "hades_save_manipulation",
-	"version": "1.0.0",
+	"version": "1.1.0",
 	"description": "Hades Save Manipulation",
 	"main": "./dist/index.js",
 	"scripts": {
-		"start": "npm run build && node ./dist/index.js",
-		"build": "npx babel ./src --out-dir ./dist"
+		"start": "cross-env NODE_ENV=development babel-node ./src/index.js",
+		"build": "cross-env NODE_ENV=production babel ./src --out-dir ./dist"
 	},
 	"author": "Dimitar Dimitrov",
 	"license": "MIT",
@@ -15,17 +15,19 @@
 	},
 	"browserslist": {
 		"development": [
-			"defaults"
+			"maintained node versions"
 		],
 		"production": [
-			"defaults"
+			"cover 99.5%"
 		]
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.15.7",
 		"@babel/core": "^7.15.5",
+		"@babel/node": "^7.15.4",
 		"@babel/plugin-transform-runtime": "^7.15.0",
 		"@babel/preset-env": "^7.15.6",
+		"cross-env": "^7.0.3",
 		"eslint": "^7.32.0",
 		"eslint-config-prettier": "^8.3.0",
 		"eslint-plugin-prettier": "^4.0.0",
@@ -33,6 +35,8 @@
 	},
 	"dependencies": {
 		"@babel/runtime": "^7.15.4",
-		"adler-32": "^1.3.0"
+		"adler-32": "^1.3.0",
+		"core-js": "^3.19.2",
+		"simplified-json": "^0.3.0"
 	}
 }
