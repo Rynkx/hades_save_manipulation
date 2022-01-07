@@ -1,6 +1,6 @@
 {
 	"name": "hades_save_manipulation",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"description": "Hades Save Manipulation",
 	"main": "./dist/index.js",
 	"scripts": {
