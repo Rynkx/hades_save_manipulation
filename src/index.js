@@ -16,8 +16,9 @@ export {
 export { SJSON } from './sjson';
 
 export { setNodeDependencies } from './node_dependecies';
-
 // TODO:
+// Add support for dual builds (esm/commonjs) in npm
+// no real tree shaking for commonjs
 // Documentation
 // Misc UI stuff, the borders and frames
 // Keyword descriptions
