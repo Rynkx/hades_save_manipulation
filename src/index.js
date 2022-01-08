@@ -17,6 +17,8 @@ export { SJSON } from './sjson';
 
 export { setNodeDependencies } from './node_dependecies';
 // TODO:
+// NOTE: reexports of any type aren't followed by default in vscode
+// jsconfig maxNodeModuleJsDepth can be used to get autocomplete.
 // Add support for dual builds (esm/commonjs) in npm
 // no real tree shaking for commonjs
 // Documentation
