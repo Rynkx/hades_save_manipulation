@@ -1,38 +1,14 @@
 import { ALL_TRAIT_TYPES } from './trait_types';
-import { mapObject, safeGetNestedProperty } from '../../utils';
+import { isString, mapObject, safeGetNestedProperty } from '../../utils';
+import { getWeaponTraitFromWeaponsCache } from './weapon_traits';
 
-const { RUN_STRUCTURED_TRAIT_TYPES, SLOT_TYPES, WEAPON_TYPES } =
-    ALL_TRAIT_TYPES;
-
-const mirrorTraits = {
-    RoomRewardMaxHealthTrait: true,
-    RoomRewardEmptyMaxHealthTrait: true
-};
-
-const ignoredTraits = { ...mirrorTraits };
-
-const weaponTypesByWeaponsCacheName = {
-    BowWeapon: WEAPON_TYPES.BOW,
-    FistWeapon: WEAPON_TYPES.FIST,
-    ShieldWeapon: WEAPON_TYPES.SHIELD,
-    SpearWeapon: WEAPON_TYPES.SPEAR,
-    GunWeapon: WEAPON_TYPES.GUN,
-    SwordWeapon: WEAPON_TYPES.SWORD
-};
-
-function getWeaponTypeFromWeaponsCache(WeaponsCache) {
-    for (const weaponName in WeaponsCache) {
-        const weaponType = weaponTypesByWeaponsCacheName[weaponName];
-        if (weaponType) {
-            return weaponType;
-        }
-    }
-}
+const { RUN_STRUCTURED_TRAIT_TYPES, SLOT_TYPES } = ALL_TRAIT_TYPES;
 
 const singleOptionTraitTypes = {
     [RUN_STRUCTURED_TRAIT_TYPES.SLOT]: mapObject(SLOT_TYPES, () => true),
     [RUN_STRUCTURED_TRAIT_TYPES.COMPANION]: true,
-    [RUN_STRUCTURED_TRAIT_TYPES.ASPECT]: true
+    [RUN_STRUCTURED_TRAIT_TYPES.ASPECT]: true,
+    [RUN_STRUCTURED_TRAIT_TYPES.WEAPON]: true
 };
 
 function addTraitToRunStructuredTraits(traitData, typeMatch, structuredTraits) {
@@ -78,36 +54,102 @@ function getRunStructuredTraitTypeMatch(typeMatch) {
     }
 }
 
-function getRunStructuredTraits(traitMap, runData) {
-    const structuredTraits = {};
-
-    const { WeaponsCache } = runData;
-    const weaponType = getWeaponTypeFromWeaponsCache(WeaponsCache);
-    structuredTraits[RUN_STRUCTURED_TRAIT_TYPES.WEAPON] = {
-        name: weaponType,
-        pom: 1
+// NOTE:
+// weapon traits are artificially inserted
+// final keepsake is extracted
+// some traits are not in the map (probably old) and filtered
+// those were found in haelian's save
+/*
+	{
+		RoomRewardMaxHealthTrait: true,
+		ShieldRushPunchTrait: true,
+		RoomRewardEmptyMaxHealthTrait: true,
+		ChaosBlessingGemTrait: true,
+		ChaosBlessingTrapDamageTrait: true,
+		MarkedDropGoldTrait: true,
+		DionysusNullifyProjectileTrait: true,
+		MultiLaserTrait: true,
+		GunFinalBulletTrait: true
+	}
+*/
+function getKnownTraits(traitMap, runData) {
+    const knownTraits = {
+        [RUN_STRUCTURED_TRAIT_TYPES.FINAL_KEEPSAKE]: null,
+        traits: {}
     };
 
     const { EndingKeepsakeName } = runData;
-    structuredTraits[RUN_STRUCTURED_TRAIT_TYPES.FINAL_KEEPSAKE] = {
-        name: EndingKeepsakeName,
-        pom: 1
-    };
+    if (isString(EndingKeepsakeName) && !!traitMap[EndingKeepsakeName]) {
+        knownTraits[RUN_STRUCTURED_TRAIT_TYPES.FINAL_KEEPSAKE] = {
+            name: EndingKeepsakeName,
+            pom: 1
+        };
+    }
+
+    const { WeaponsCache } = runData;
+    const weaponTrait = getWeaponTraitFromWeaponsCache(WeaponsCache);
+    knownTraits.traits[weaponTrait] = 1;
 
     const { TraitCache } = runData;
     for (const traitName in TraitCache) {
-        if (traitName in ignoredTraits) {
+        if (!traitMap[traitName]) {
             continue;
         }
 
+        knownTraits.traits[traitName] = TraitCache[traitName];
+    }
+
+    let hasExplicitAspect = false;
+    for (const traitName in knownTraits.traits) {
+        if (
+            traitMap[traitName].typeMatches[0][0] ===
+            ALL_TRAIT_TYPES.TRAIT_TYPES.ASPECT
+        ) {
+            hasExplicitAspect = true;
+        }
+    }
+    if (!hasExplicitAspect) {
+        const { defaultAspect } = traitMap[weaponTrait];
+        knownTraits.traits[defaultAspect] = 1;
+    }
+
+    return knownTraits;
+}
+
+function getRunStructuredTraitsFromKnown(traitMap, knownTraits) {
+    const structuredTraits = {};
+
+    const { [RUN_STRUCTURED_TRAIT_TYPES.FINAL_KEEPSAKE]: finalKeepsake } =
+        knownTraits;
+    structuredTraits[RUN_STRUCTURED_TRAIT_TYPES.FINAL_KEEPSAKE] = finalKeepsake;
+
+    const { traits } = knownTraits;
+    for (const traitName in traits) {
         const typeMatch = getRunStructuredTraitTypeMatch(
             traitMap[traitName].typeMatches[0]
         );
-        const traitData = { name: traitName, pom: TraitCache[traitName] };
+        const traitData = { name: traitName, pom: traits[traitName] };
         addTraitToRunStructuredTraits(traitData, typeMatch, structuredTraits);
     }
 
+    if (!structuredTraits[ALL_TRAIT_TYPES.TRAIT_TYPES.WEAPON]) {
+        throw `No weapon!`;
+    }
+    if (!structuredTraits[ALL_TRAIT_TYPES.TRAIT_TYPES.ASPECT]) {
+        throw `No aspect!`;
+    }
     return structuredTraits;
 }
 
-export { getRunStructuredTraits };
+function getRunStructuredTraits(traitMap, runData) {
+    return getRunStructuredTraitsFromKnown(
+        traitMap,
+        getKnownTraits(traitMap, runData)
+    );
+}
+
+export {
+    getKnownTraits,
+    getRunStructuredTraitsFromKnown,
+    getRunStructuredTraits
+};

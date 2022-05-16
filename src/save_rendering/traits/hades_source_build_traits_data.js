@@ -11,6 +11,7 @@ import { traitInterpolationDataExtractionByType } from './trait_interpolation_da
 import { getTraitTypeStructureMatches } from './get_trait_type_structure_matches';
 import { getTraitPropertiesData } from './get_trait_properties_data';
 import { filterTraitPropertiesMapUsedInDescription } from './filter_trait_properties_map_used_in_description';
+import { WEAPON_TRAITS } from './weapon_traits';
 
 function getTraitData(traitName, traitData, helpText) {
     const preferredTraitNameForDescription =
@@ -50,8 +51,7 @@ async function hadesSourceBuildTraitsData(
 ) {
     const traitMap = hadesSourceFilterTraitMap(hadesSourceTraitData, helpText);
 
-    const listsByTypeStructure = getTraitListsByTypeStructure(traitMap);
-
+    // NOTE: unaware of "fake" weapon traits, will be filled in later
     const traitsIconLocation = await hadesSourceGetTraitsIconLocation(
         traitMap,
         hadesSourceGuiPackagePath
@@ -65,6 +65,23 @@ async function hadesSourceBuildTraitsData(
         map[traitName] = getTraitData(traitName, traitData, helpText);
         map[traitName].iconLocation = traitsIconLocation[traitName];
     }
+
+    const weaponTraitsWithIcon = {};
+    for (const weaponName in WEAPON_TRAITS) {
+        const { defaultAspect, ...weaponData } = WEAPON_TRAITS[weaponName];
+        const { iconLocation } = map[defaultAspect];
+        if (!iconLocation) {
+            throw `Inline weapon trait: ${weaponName} can't find its icon!`;
+        }
+        weaponTraitsWithIcon[weaponName] = {
+            ...weaponData,
+            defaultAspect,
+            iconLocation
+        };
+    }
+    Object.assign(map, weaponTraitsWithIcon);
+
+    const listsByTypeStructure = getTraitListsByTypeStructure(map);
 
     return { listsByTypeStructure, map };
 }

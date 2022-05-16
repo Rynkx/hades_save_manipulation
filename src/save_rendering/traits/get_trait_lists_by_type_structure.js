@@ -1,5 +1,3 @@
-import { getTraitTypeStructureMatches } from './get_trait_type_structure_matches';
-
 function addTraitMatchToTraitListsByTypeStructure(
     traitName,
     traitMatch,
@@ -23,9 +21,7 @@ function addTraitMatchToTraitListsByTypeStructure(
 function getTraitListsByTypeStructure(traitMap) {
     const traitListsByTypeStructure = {};
     for (const traitName in traitMap) {
-        const traitData = traitMap[traitName];
-
-        const traitMatches = getTraitTypeStructureMatches(traitName, traitData);
+        const { typeMatches: traitMatches } = traitMap[traitName];
 
         for (const traitMatch of traitMatches) {
             addTraitMatchToTraitListsByTypeStructure(

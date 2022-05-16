@@ -1,17 +1,40 @@
 export { readHadesSaveFromArrayBuffer } from './hades_save_manipulation';
+export { BASE_INTERPOLATION_TYPES } from './help_text';
+
+export { hadesSourceBuildGameData } from './hades_source_build_game_data';
 
 export {
-    BASE_INTERPOLATION_TYPES,
     ALL_META_UPGRADE_TYPES,
     interpolateMetaUpgradeProperty,
     calculateMetaUpgradeCost,
     calculateMetaUpgradeValue,
+    getKnownMetaUpgrades,
+    getRunStructuredMetaUpgradesFromKnown,
+    getRunStructuredMetaUpgrades,
     ALL_TRAIT_TYPES,
     interpolateTraitProperty,
+    getKnownTraits,
+    getRunStructuredTraitsFromKnown,
+    getRunStructuredTraits,
     ALL_ROOM_TYPES,
-    hadesSourceBuildGameData,
+    getKnownRooms,
+    getRunStructuredRoomsFromKnown,
+    getRunStructuredRooms,
+    FISH_RARITY_TYPES,
+    buildFishData,
+    getKnownFish,
+    getStructuredFishingDataFromKnown,
+    getStructuredFishingData,
+    getKnownRunData,
+    getRunStructuredGameDataFromKnown,
+    getRunStructuredGameData,
+    getKnownSaveData,
+    getSaveStructuredGameDataFromKnown,
     getSaveStructuredGameData
 } from './save_rendering';
+
+import gameData from './gameData.json';
+export { gameData };
 
 export { SJSON } from './sjson';
 

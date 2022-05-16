@@ -225,11 +225,19 @@ async function hadesSourceBuildRoomsData(hadesSourceRoomDataDirectory) {
     return { listsByTypeStructure, map };
 }
 
-// TODO: More work here, { CHAOS: { CHAOS: [] } } is weird.
-function getRunStructuredRooms(roomMap, roomCountCache) {
-    const structured = {};
+function getKnownRooms(roomMap, roomCountCache) {
+    const knownRooms = {};
     for (const roomName in roomCountCache) {
-        const roomCount = roomCountCache[roomName];
+        if (!roomMap[roomName]) continue;
+        knownRooms[roomName] = roomCountCache[roomName];
+    }
+    return knownRooms;
+}
+
+function getRunStructuredRoomsFromKnown(roomMap, knownRooms) {
+    const structured = {};
+    for (const roomName in knownRooms) {
+        const roomCount = knownRooms[roomName];
         const [biome, roomType] = roomMap[roomName].typeMatch;
         if (!structured[biome]) {
             structured[biome] = {};
@@ -259,7 +267,20 @@ function getRunStructuredRooms(roomMap, roomCountCache) {
     }
     return structured;
 }
+// TODO: More work here, { CHAOS: { CHAOS: [] } } is weird.
+function getRunStructuredRooms(roomMap, roomCountCache) {
+    return getRunStructuredRoomsFromKnown(
+        roomMap,
+        getKnownRooms(roomMap, roomCountCache)
+    );
+}
 
 // TODO: Death room data.
 
-export { hadesSourceBuildRoomsData, getRunStructuredRooms, ALL_ROOM_TYPES };
+export {
+    ALL_ROOM_TYPES,
+    hadesSourceBuildRoomsData,
+    getKnownRooms,
+    getRunStructuredRoomsFromKnown,
+    getRunStructuredRooms
+};

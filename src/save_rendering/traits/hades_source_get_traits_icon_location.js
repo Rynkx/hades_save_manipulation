@@ -202,7 +202,9 @@ async function getDirectoryIconsByTraitType(hadesSourceGuiPackagePath) {
     const directoryIconsByType = {};
 
     for (const traitType in TRAIT_TYPES) {
-        const { location } = ICON_DATA_BY_TRAIT_TYPE[traitType];
+        const location = ICON_DATA_BY_TRAIT_TYPE?.[traitType]?.location;
+        if (!location) continue;
+
         directoryIconsByType[traitType] = await readDirectory(
             `${hadesSourceGuiPackagePath}/${location}`
         );

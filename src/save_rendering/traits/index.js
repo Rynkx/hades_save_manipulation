@@ -1,6 +1,10 @@
 export { hadesSourceBuildTraitsData } from './hades_source_build_traits_data';
 
-export { getRunStructuredTraits } from './get_run_structured_traits';
+export {
+    getKnownTraits,
+    getRunStructuredTraitsFromKnown,
+    getRunStructuredTraits
+} from './get_run_structured_traits';
 
 export { ALL_TRAIT_TYPES } from './trait_types';
 

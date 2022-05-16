@@ -1,15 +1,48 @@
 export { BASE_INTERPOLATION_TYPES } from './help_text';
 
+export { hadesSourceBuildGameData } from './hades_source_build_game_data';
+
 export {
     ALL_META_UPGRADE_TYPES,
     interpolateMetaUpgradeProperty,
     calculateMetaUpgradeCost,
-    calculateMetaUpgradeValue
+    calculateMetaUpgradeValue,
+    getKnownMetaUpgrades,
+    getRunStructuredMetaUpgradesFromKnown,
+    getRunStructuredMetaUpgrades
 } from './meta_upgrades';
 
-export { ALL_TRAIT_TYPES, interpolateTraitProperty } from './traits';
+export {
+    ALL_TRAIT_TYPES,
+    interpolateTraitProperty,
+    getKnownTraits,
+    getRunStructuredTraitsFromKnown,
+    getRunStructuredTraits
+} from './traits';
 
-export { ALL_ROOM_TYPES } from './rooms';
+export {
+    ALL_ROOM_TYPES,
+    getKnownRooms,
+    getRunStructuredRoomsFromKnown,
+    getRunStructuredRooms
+} from './rooms';
 
-export { hadesSourceBuildGameData } from './hades_source_build_game_data';
-export { getSaveStructuredGameData } from './get_save_structured_game_data';
+export {
+    FISH_RARITY_TYPES,
+    buildFishData,
+    getKnownFish,
+    getStructuredFishingDataFromKnown,
+    getStructuredFishingData
+} from './fishing';
+
+export {
+    getKnownRunData,
+    getRunStructuredGameDataFromKnown,
+    getRunStructuredGameData
+} from './get_run_structured_game_data';
+
+export {
+    getKnownSaveData,
+    getSaveStructuredGameDataFromKnown,
+    getSaveStructuredGameData
+} from './get_save_structured_game_data';

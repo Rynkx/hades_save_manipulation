@@ -65,18 +65,42 @@ function getRunStructuredHeat(
     return heat;
 }
 
-function getRunStructuredMetaUpgrades(metaUpgradesData, metaUpgradeCache) {
+function getKnownMetaUpgrades(metaUpgradesData, metaUpgradeCache) {
+    const knownMetaUpgrades = {};
+    for (const name in metaUpgradeCache) {
+        if (metaUpgradesData.map[name] && metaUpgradeCache[name] > 0) {
+            knownMetaUpgrades[name] = metaUpgradeCache[name];
+        }
+    }
+    return knownMetaUpgrades;
+}
+
+function getRunStructuredMetaUpgradesFromKnown(
+    metaUpgradesData,
+    knownMetaUpgrades
+) {
     const { listsByTypeStructure } = metaUpgradesData;
     return {
         [TREE_TYPES.MIRROR]: getRunStructuredMirror(
             listsByTypeStructure,
-            metaUpgradeCache
+            knownMetaUpgrades
         ),
         [TREE_TYPES.HEAT]: getRunStructuredHeat(
             listsByTypeStructure,
-            metaUpgradeCache
+            knownMetaUpgrades
         )
     };
 }
 
-export { getRunStructuredMetaUpgrades };
+function getRunStructuredMetaUpgrades(metaUpgradesData, metaUpgradeCache) {
+    return getRunStructuredMetaUpgradesFromKnown(
+        metaUpgradesData,
+        getKnownMetaUpgrades(metaUpgradesData, metaUpgradeCache)
+    );
+}
+
+export {
+    getKnownMetaUpgrades,
+    getRunStructuredMetaUpgradesFromKnown,
+    getRunStructuredMetaUpgrades
+};

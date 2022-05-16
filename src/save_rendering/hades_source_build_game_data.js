@@ -2,6 +2,7 @@ import { readJSON, writeFile } from '../node_dependecies';
 import { isString } from '../utils';
 import { hadesSourceBuildClearMessagesData } from './clear_messages';
 import { createImageAssets } from './create_image_assets';
+import { buildFishData } from './fishing';
 import { hadesSourceBuildHelpText } from './help_text';
 import { hadesSourceBuildMetaUpgradesData } from './meta_upgrades';
 import { hadesSourceBuildRoomsData } from './rooms';
@@ -42,11 +43,14 @@ async function hadesSourceBuildGameData(
         helpText
     );
 
+    const fishData = buildFishData();
+
     const gameData = {
         metaUpgradesData,
         traitsData,
         roomsData,
-        clearMessagesData
+        clearMessagesData,
+        fishData
     };
 
     if (isString(assetsDestinationPath)) {

@@ -29,6 +29,23 @@ const fishRarityTypeByRarityTypeKeyword = reverseObject(
     fishRarityTypeKeywordByRarityType
 );
 
+const getFishName = (biomeType, rarityType) => {
+    const biomeKeyword = fishBiomeKeywordByBiome[biomeType];
+    const rarityKeyword = fishRarityTypeKeywordByRarityType[rarityType];
+    return `Fish_${biomeKeyword}_${rarityKeyword}_01`;
+};
+
+const buildFishData = () => {
+    const fish = { map: {} };
+    for (const biome in fishBiomeKeywordByBiome) {
+        for (const rarity in FISH_RARITY_TYPES) {
+            const fishName = getFishName(biome, rarity);
+            fish.map[fishName] = { biome, rarity };
+        }
+    }
+    return fish;
+};
+
 const fishNameRegex = /Fish_(\w*)_(\w*)_01/;
 
 function analyzeFishName(fishName) {
@@ -40,19 +57,41 @@ function analyzeFishName(fishName) {
     ];
 }
 
-function getStructuredFishingData(totalFishCaught) {
+function getKnownFish(fishData, totalFishCaught) {
+    const knownFish = {};
+    for (const fishName in totalFishCaught) {
+        if (!fishData.map[fishName]) continue;
+        knownFish[fishName] = totalFishCaught[fishName];
+    }
+    return knownFish;
+}
+
+function getStructuredFishingDataFromKnown(fishData, knownFish) {
     const fishAmountByRarity = {};
 
-    for (const fishName in totalFishCaught) {
+    for (const fishName in knownFish) {
         const [, rarityType] = analyzeFishName(fishName);
         if (!fishAmountByRarity[rarityType]) {
             fishAmountByRarity[rarityType] = 0;
         }
-        const fishAmount = totalFishCaught[fishName];
+        const fishAmount = knownFish[fishName];
         fishAmountByRarity[rarityType] += fishAmount;
     }
 
     return fishAmountByRarity;
 }
 
-export { getStructuredFishingData, FISH_RARITY_TYPES };
+function getStructuredFishingData(fishData, totalFishCaught) {
+    return getStructuredFishingDataFromKnown(
+        fishData,
+        getKnownFish(fishData, totalFishCaught)
+    );
+}
+
+export {
+    FISH_RARITY_TYPES,
+    buildFishData,
+    getKnownFish,
+    getStructuredFishingDataFromKnown,
+    getStructuredFishingData
+};
