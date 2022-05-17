@@ -1,7 +1,7 @@
 export { readHadesSaveFromArrayBuffer } from './hades_save_manipulation';
-export { BASE_INTERPOLATION_TYPES } from './help_text';
+export { BASE_INTERPOLATION_TYPES } from './save_rendering/help_text';
 
-export { hadesSourceBuildGameData } from './hades_source_build_game_data';
+export { hadesSourceBuildGameData } from './save_rendering/hades_source_build_game_data';
 
 export {
     ALL_META_UPGRADE_TYPES,
@@ -33,12 +33,12 @@ export {
     getSaveStructuredGameData
 } from './save_rendering';
 
-import gameData from './gameData.json';
-export { gameData };
+export { gameData } from './gameData';
 
 export { SJSON } from './sjson';
 
 export { setNodeDependencies } from './node_dependecies';
+
 // TODO:
 // NOTE: reexports of any type aren't followed by default in vscode
 // jsconfig maxNodeModuleJsDepth can be used to get autocomplete.
